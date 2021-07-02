@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'followers', 'following_id', 'user_id');
     }
 
+    public function tweets()
+    {
+        return $this->hasMany(Tweet::class);
+    }
+
     public function tweetsFromFollowing()
     {
         return $this->hasManyThrough(Tweet::class, Follower::class, 'user_id', 'user_id', 'id', 'following_id');
