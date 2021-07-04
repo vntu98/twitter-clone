@@ -19,9 +19,10 @@ class TimelineController extends Controller
             ->tweetsFromFollowing()
             ->latest()
             ->with([
-                'user'
+                'user',
+                'likes'
             ])
-            ->paginate(13);
+            ->paginate(10);
 
         return new TweetCollection($tweets);
     }
