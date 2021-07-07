@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Tweets;
 
 use App\Events\Tweets\TweetLikesWereUpdated;
 use App\Http\Controllers\Controller;
