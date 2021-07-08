@@ -21,9 +21,15 @@ export default {
                 return !state.tweets.map(t => t.id).includes(tweet.id)
             }))
         },
+
+        POP_TWEET(state, id) {
+            state.tweets = state.tweets.filter(t => t.id !== id)
+        },
+
         UNSHIFT_TWEETS(state, data) {
             state.tweets.unshift(data)
         },
+
         SET_LIKES(state, { id, count }) {
             state.tweets = state.tweets.map(t => {
                 if (t.id === id) {
@@ -32,6 +38,21 @@ export default {
 
                 if (get(t.original_tweet, 'id') === id) {
                     t.original_tweet.likes_count = count
+                }
+
+                return t
+            })
+        },
+
+        SET_RETWEETS(state, { id, count }) {
+            state.tweets = state.tweets.map(t => {
+                if (t.id === id) {
+                    t.retweets_count = count
+                }
+
+                if (get(t.original_tweet, 'id') === id) {
+                    console.log(t.original_tweet)
+                    t.original_tweet.retweets_count = count
                 }
 
                 return t

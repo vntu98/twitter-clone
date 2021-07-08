@@ -5,8 +5,8 @@
         </svg>
         <span
             class="text-gray-600"
-            :class="{ 'text-green-600': retweeted }"
-        >{{ tweet.retweet_count }}</span>
+            :class="{ 'text-green-600' : retweeted }"
+        >{{ tweet.retweets_count }}</span>
     </a>
 </template>
 

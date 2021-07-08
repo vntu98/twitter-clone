@@ -8,9 +8,12 @@
                 v-model="form.body"
             />
 
-            <div class="flex justify-between">
+            <div class="flex items-center justify-end">
                 <div>
-                    actions
+                    <app-tweet-compose-limit
+                        class="mr-2"
+                        :body="form.body"
+                    />
                 </div>
 
                 <div>
