@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
@@ -14,7 +16,20 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      textColor: ['responsive', 'hover', 'focus', 'important'],
+    },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addVariant }) {
+      addVariant('important', ({ container }) => {
+        container.walkRules(rule => {
+          rule.selector = `.\\!${rule.selector.slice(1)}`
+          rule.walkDecls(decl => {
+            decl.important = true
+          })
+        })
+      })
+    })
+  ],
 }
