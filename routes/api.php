@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Media\MediaController;
 use App\Http\Controllers\Api\Media\MediaTypeController;
 use App\Http\Controllers\Api\Timeline\TimelineController;
 use App\Http\Controllers\Api\Tweets\TweetLikeController;
@@ -17,4 +18,5 @@ Route::delete('/tweets/{tweet}/likes', [TweetLikeController::class, 'destroy']);
 Route::post('/tweets/{tweet}/retweets', [TweetRetweetController::class, 'store']);
 Route::delete('/tweets/{tweet}/retweets', [TweetRetweetController::class, 'destroy']);
 
+Route::post('/media', [MediaController::class, 'store']);
 Route::get('/media/types', [MediaTypeController::class, 'index']);

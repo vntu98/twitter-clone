@@ -1,11 +1,21 @@
 <template>
     <form class="flex" @submit.prevent="submit">
-        <div class="mr-3">
-            <img :src="$user.avatar" class="w-12 rounded-full">
-        </div>
+        <img :src="$user.avatar" class="w-12 h-12 rounded-full mr-3">
         <div class="flex-grow">
             <app-tweet-compose-textarea 
                 v-model="form.body"
+            />
+
+            <app-tweet-image-preview
+                :images="media.images"
+                v-if="media.images.length"
+                @removed="removeImage"
+            />
+
+            <app-tweet-video-preview
+                :video="media.video"
+                v-if="media.video"
+                @removed="removeVideo"
             />
 
             <div class="flex justify-between">
@@ -68,6 +78,14 @@
                 this.form.body = ''
             },
 
+            removeVideo () {
+                this.media.video = null
+            },
+
+            removeImage (image) {
+                this.media.images = this.media.images.filter(i => i !== image)
+            },
+
             async getMediaTypes () {
                 let response = await axios.get('/api/media/types')
 
@@ -81,7 +99,7 @@
                     }
 
                     if (this.mediaTypes.video.includes(file.type)) {
-                        this.media.video.push(file)
+                        this.media.video = file
                     }
                 })
 
