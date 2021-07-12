@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-4 relative">
+    <div class="mb-4 relative w-full">
         <video controls preload :src="generateVideoPreview(video)" class="rounded-lg"></video>
 
         <a
