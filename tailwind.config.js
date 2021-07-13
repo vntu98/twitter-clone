@@ -18,6 +18,7 @@ module.exports = {
   variants: {
     extend: {
       textColor: ['responsive', 'hover', 'focus', 'important'],
+      backgroundColor: ['responsive', 'hover', 'focus', 'important']
     },
   },
   plugins: [
