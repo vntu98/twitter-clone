@@ -24,4 +24,4 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/api/timeline', [TimelineController::class, 'index']);
+Route::get('/timeline', [TimelineController::class, 'index']);

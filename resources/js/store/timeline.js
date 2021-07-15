@@ -51,8 +51,21 @@ export default {
                 }
 
                 if (get(t.original_tweet, 'id') === id) {
-                    console.log(t.original_tweet)
                     t.original_tweet.retweets_count = count
+                }
+
+                return t
+            })
+        },
+
+        SET_REPLIES(state, { id, count }) {
+            state.tweets = state.tweets.map(t => {
+                if (t.id === id) {
+                    t.replies_count = count
+                }
+
+                if (get(t.original_tweet, 'id') === id) {
+                    t.original_tweet.replies_count = count
                 }
 
                 return t
@@ -71,6 +84,14 @@ export default {
             commit('retweets/PUSH_RETWEETS', response.data.meta.retweets, { root: true })
 
             return response
+        },
+
+        async quoteTweet({ commit }, { tweet, data }) {
+            await axios.post(`/api/tweets/${tweet.id}/quotes`, data)
+        },
+
+        async replyToTweet({ commit }, { tweet, data }) {
+            await axios.post(`/api/tweets/${tweet.id}/replies`, data)
         }
     }
 }
