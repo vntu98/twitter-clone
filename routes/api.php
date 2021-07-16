@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Media\MediaController;
 use App\Http\Controllers\Api\Media\MediaTypeController;
+use App\Http\Controllers\Api\Notifications\NotificationController;
 use App\Http\Controllers\Api\Timeline\TimelineController;
 use App\Http\Controllers\Api\Tweets\TweetLikeController;
 use App\Http\Controllers\Api\Tweets\TweetController;
@@ -26,3 +27,5 @@ Route::post('/tweets/{tweet}/quotes', [TweetQuoteController::class, 'store']);
 
 Route::post('/media', [MediaController::class, 'store']);
 Route::get('/media/types', [MediaTypeController::class, 'index']);
+
+Route::get('/notifications', [NotificationController::class, 'index']);
