@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/timeline', [TimelineController::class, 'index']);
 
+Route::get('/tweets', [TweetController::class, 'index']);
 Route::post('/tweets', [TweetController::class, 'store']);
 
 Route::post('/tweets/{tweet}/replies', [TweetReplyController::class, 'store']);

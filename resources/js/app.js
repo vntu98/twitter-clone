@@ -72,6 +72,7 @@ Echo.channel('tweets')
         }
 
         store.commit('timeline/SET_LIKES', e)
+        store.commit('notifications/SET_LIKES', e)
 
     })
     .listen('.TweetRetweetsWereUpdated', (e) => {
@@ -80,9 +81,11 @@ Echo.channel('tweets')
         }
 
         store.commit('timeline/SET_RETWEETS', e)
+        store.commit('notifications/SET_RETWEETS', e)
     })
     .listen('.TweetRepliesWereUpdated', (e) => {
         store.commit('timeline/SET_REPLIES', e)
+        store.commit('notifications/SET_REPLIES', e)
     })
     .listen('.TweetWasDeleted', (e) => {
         store.commit('timeline/POP_TWEET', e.id)
