@@ -20,7 +20,20 @@ class TweetController extends Controller
 
     public function index(Request $request)
     {
-        return new TweetCollection(Tweet::find(explode(',', $request->ids)));
+        $tweets = Tweet::with([
+                'user',
+                'likes',
+                'retweets',
+                'replies',
+                'media.baseMedia',
+                'originalTweet.user',
+                'originalTweet.likes',
+                'originalTweet.retweets',
+                'originalTweet.media.baseMedia'
+            ])
+            ->find(explode(',', $request->ids));
+
+        return new TweetCollection($tweets);
     }
 
     public function store(TweetStoreRequest $request)
@@ -32,6 +45,8 @@ class TweetController extends Controller
         foreach ($request->media as $id) {
             $tweet->media()->save(TweetMedia::find($id));
         }
+
+        dd($tweet->mentions->users());
 
         broadcast(new TweetWasCreated($tweet));
     }
