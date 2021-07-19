@@ -6,8 +6,10 @@ use App\Events\Tweets\TweetWasCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tweets\TweetStoreRequest;
 use App\Http\Resources\TweetCollection;
+use App\Http\Resources\TweetResource;
 use App\Models\Tweet;
 use App\Models\TweetMedia;
+use App\Notifications\Tweets\TweetMentionedIn;
 use App\Tweets\TweetType;
 use Illuminate\Http\Request;
 
@@ -36,6 +38,11 @@ class TweetController extends Controller
         return new TweetCollection($tweets);
     }
 
+    public function show(Tweet $tweet)
+    {
+        return new TweetCollection(collect([$tweet])->merge($tweet->parents()));
+    }
+
     public function store(TweetStoreRequest $request)
     {
         $tweet = $request->user()->tweets()->create(array_merge($request->only('body'), [
@@ -46,7 +53,11 @@ class TweetController extends Controller
             $tweet->media()->save(TweetMedia::find($id));
         }
 
-        dd($tweet->mentions->users());
+        foreach ($tweet->mentions->users() as $user) {
+            if ($request->user()->id !== $user->id) {
+                $user->notify(new TweetMentionedIn($request->user(), $tweet));
+            }
+        }
 
         broadcast(new TweetWasCreated($tweet));
     }
