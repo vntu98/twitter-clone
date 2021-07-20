@@ -2502,6 +2502,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -2511,13 +2519,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)({
-    tweet: 'conversation/tweet'
+    tweet: 'conversation/tweet',
+    parents: 'conversation/parents',
+    replies: 'conversation/replies'
   })),
   methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)({
     getTweets: 'conversation/getTweets'
   })),
   mounted: function mounted() {
     this.getTweets("/api/tweets/".concat(this.id));
+    this.getTweets("/api/tweets/".concat(this.id, "/replies"));
   }
 });
 
@@ -3555,6 +3566,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     tweet: {
@@ -3663,6 +3678,7 @@ Echo.channel('tweets').listen('.TweetLikesWereUpdated', function (e) {
 
   store.commit('timeline/SET_LIKES', e);
   store.commit('notifications/SET_LIKES', e);
+  store.commit('conversation/SET_LIKES', e);
 }).listen('.TweetRetweetsWereUpdated', function (e) {
   if (e.user_id === parseInt(User.id)) {
     store.dispatch('retweets/syncRetweet', e.id);
@@ -3670,9 +3686,11 @@ Echo.channel('tweets').listen('.TweetLikesWereUpdated', function (e) {
 
   store.commit('timeline/SET_RETWEETS', e);
   store.commit('notifications/SET_RETWEETS', e);
+  store.commit('conversation/SET_RETWEETS', e);
 }).listen('.TweetRepliesWereUpdated', function (e) {
   store.commit('timeline/SET_REPLIES', e);
   store.commit('notifications/SET_REPLIES', e);
+  store.commit('conversation/SET_REPLIES', e);
 }).listen('.TweetWasDeleted', function (e) {
   store.commit('timeline/POP_TWEET', e.id);
 });
@@ -3937,6 +3955,24 @@ __webpack_require__.r(__webpack_exports__);
       return function (id) {
         return state.tweets.find(function (t) {
           return t.id == id;
+        });
+      };
+    },
+    parents: function parents(state) {
+      return function (id) {
+        return state.tweets.filter(function (t) {
+          return t.id != id && !t.parent_ids.includes(parseInt(id));
+        }).sort(function (a, b) {
+          return a.created_at - b.created_at;
+        });
+      };
+    },
+    replies: function replies(state) {
+      return function (id) {
+        return state.tweets.filter(function (t) {
+          return t.parent_id == id;
+        }).sort(function (a, b) {
+          return a.created_at - b.created_at;
         });
       };
     }
@@ -49991,7 +50027,13 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", [_vm._v("\n        parents\n    ")]),
+    _c(
+      "div",
+      _vm._l(_vm.parents(_vm.id), function(t) {
+        return _c("app-tweet", { key: t.id, attrs: { tweet: t } })
+      }),
+      1
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -50004,7 +50046,13 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", [_vm._v("\n        replies\n    ")])
+    _c(
+      "div",
+      _vm._l(_vm.replies(_vm.id), function(t) {
+        return _c("app-tweet", { key: t.id, attrs: { tweet: t } })
+      }),
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -51112,6 +51160,15 @@ var render = function() {
       { staticClass: "flex-grow" },
       [
         _c("app-tweet-username", { attrs: { user: _vm.tweet.user } }),
+        _vm._v(" "),
+        _vm.tweet.replying_to
+          ? _c("div", { staticClass: "text-gray-600 mb-2" }, [
+              _vm._v("\n            Replying to "),
+              _c("a", { attrs: { href: "#" } }, [
+                _vm._v("@" + _vm._s(_vm.tweet.replying_to))
+              ])
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _c("app-tweet-body", { attrs: { tweet: _vm.tweet } }),
         _vm._v(" "),

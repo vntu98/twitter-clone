@@ -1,7 +1,11 @@
 <template>
     <div>
         <div>
-            parents
+            <app-tweet
+                v-for="t in parents(id)"
+                :key="t.id"
+                :tweet="t"
+            />
         </div>
 
         <div class="text-lg border-b-8 border-t-8 border-gray-800">
@@ -11,7 +15,11 @@
             />
         </div>
         <div>
-            replies
+            <app-tweet
+                v-for="t in replies(id)"
+                :key="t.id"
+                :tweet="t"
+            />
         </div>
     </div>
 </template>
@@ -29,7 +37,9 @@ export default {
 
     computed: {
         ...mapGetters({
-            tweet: 'conversation/tweet'
+            tweet: 'conversation/tweet',
+            parents: 'conversation/parents',
+            replies: 'conversation/replies'
         })
     },
 
@@ -41,6 +51,7 @@ export default {
 
     mounted() {
         this.getTweets(`/api/tweets/${this.id}`)
+        this.getTweets(`/api/tweets/${this.id}/replies`)
     }
 }
 </script>

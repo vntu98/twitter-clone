@@ -5,6 +5,10 @@
             <app-tweet-username
                 :user="tweet.user"
             />
+
+            <div v-if="tweet.replying_to" class="text-gray-600 mb-2">
+                Replying to <a href="#">@{{ tweet.replying_to }}</a>
+            </div>
             
             <app-tweet-body :tweet="tweet" />
 
